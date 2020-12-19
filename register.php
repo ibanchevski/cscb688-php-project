@@ -1,14 +1,42 @@
+<?php
+session_start();
+require_once('utils/database.php');
+if (isset($_POST) && count($_POST)) {
+  $email = $_POST['email'];
+  $password = $_POST['password'];
+  $name = $_POST['name'];
+
+  $cnt = $db->query("select count(id) as userscnt from users where email='$email'");
+  $cnt = (int)$cnt->fetch_array()['userscnt'];
+
+  if ($cnt !== 0) {
+    $error = 'User already exists!';
+  } else {
+    $r = $db->query("insert into users(name, email, password) values('$name','$email','$password')");
+    $_SESSION['userid'] = $db->insert_id;
+    header('location:dashboard.php');
+  }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <?php
-
-$CURR_TITLE = 'Register';
-require_once("./head.php");
-
+  $CURR_TITLE = 'Register';
+  require_once("./head.php");
 ?>
 
 <body>
   <div class="container d-flex flex-column justify-content-center" style="height: 100vh">
+    <div class="row">
+      <div class="col-sm-4 offset-lg-4">
+        <?php
+          if (isset($error)) {
+          echo "<div class='alert alert-danger'>$error</div>";
+          }
+        ?>
+      </div>
+    </div>
     <div class="row">
       <div class="col-sm-4 offset-lg-4">
         <div class="card shadow-sm">
@@ -16,7 +44,7 @@ require_once("./head.php");
             <div class="card-title text-center">
               <h2>Register</h2>
             </div>
-            <form name="register" method="POST" action="login.php">
+            <form name="register" method="POST">
               <div class="mb-3">
                 <label for="name">Full name</label>
                 <input type="text" class="form-control" name="name" id="name">
