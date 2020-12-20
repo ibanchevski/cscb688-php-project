@@ -3,7 +3,7 @@ session_start();
 require_once("utils/database.php");
 $userid = $_SESSION['userid'];
 $q = $db->query("select email,name from users where id=$userid");
-$username = $q->fetch_array()['name'];
+$username = $q->fetch_assoc()['name'];
 ?>
 
 <!DOCTYPE html>
