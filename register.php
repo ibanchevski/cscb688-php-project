@@ -12,9 +12,10 @@ if (isset($_POST) && count($_POST)) {
   if ($cnt !== 0) {
     $error = 'User already exists!';
   } else {
-    $r = $db->query("insert into users(name, email, password) values('$name','$email','$password')");
-    $_SESSION['userid'] = $db->insert_id;
-    header('location:dashboard.php');
+      $password = password_hash($password, PASSWORD_BCRYPT);
+      $db->query("insert into users(name, email, password) values('$name','$email','$password')");
+      $_SESSION['userid'] = $db->insert_id;
+      header('location:dashboard.php');
   }
 }
 ?>

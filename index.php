@@ -11,11 +11,11 @@ if (isset($_POST) && count($_POST)) {
     $foundUser = $findUserQuery->fetch_array();
 
     if ($foundUser['email'] === $email) {
-        if ($foundUser['password'] !== $password) {
-            $_SESSION['errormsg'] = 'Invalid email or password!';
-        } else {
+        if (password_verify($password, $foundUser['password'])) {
             $_SESSION['userid'] = $foundUser['id'];
             header('location:dashboard.php');
+        } else {
+            $_SESSION['errormsg'] = 'Invalid email or password!';
         }
     }
 }
