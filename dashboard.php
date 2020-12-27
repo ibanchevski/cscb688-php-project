@@ -8,6 +8,13 @@ if (isset($_POST['customCategory'])) {
     header('location:dashboard.php');
 }
 
+if (isset($_POST['deleteCategory'])) {
+    echo "Delete category: ".$_POST['deleteCategory'];
+    // TODO: Try/Catch error
+    $db->query('delete from user_categories where id='.$_POST['deleteCategory']);
+    header('location:dashboard.php');
+}
+
 $userid = $_SESSION['userid'];
 $q = $db->query("select email,name from users where id=$userid");
 $username = $q->fetch_assoc()['name'];
@@ -82,9 +89,15 @@ require_once('head.php');
         <div class="row category-holder">
             <?php
             while ($category = $categories->fetch_assoc()) {
-                echo '<div class="col-sm category mb-3">';
-                echo "<h5>".$category['name']."</h5>";
-                echo '</div>';
+                echo '
+                    <div class="col-sm category mb-3">
+                      <h5>' .$category["name"]. '</h5>
+                      <form method="post" style="display: inline;">
+                        <input type="hidden" name="deleteCategory" value="'.$category["id"].'" style="width:0;">
+                        <button type="submit" class="btn btn-sm btn-danger float-end mt-3">Delete</button>
+                      </form>
+                    </div>
+                ';
             }
             ?>
         </div>
@@ -92,7 +105,7 @@ require_once('head.php');
     <a href="#" class="new-log-btn" id="addRecordBtn" title="Add record">
         <i class="fas fa-plus"></i>
     </a>
-    <div class="add-record-modal">
+    <div class="add-record-modal d-none">
         <div class="inside">
             <div class="row">
                 <div class="col-md-12">
