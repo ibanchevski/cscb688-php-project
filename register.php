@@ -43,6 +43,7 @@ if (isset($_POST) && count($_POST)) {
         <div class="card shadow-sm">
           <div class="card-body">
             <div class="card-title text-center">
+              <a href="/" class="btn btn-sm btn-outline-secondary float-start"><i class="fas fa-arrow-left"></i></a>
               <h2>Register</h2>
             </div>
             <form name="register" method="POST">
@@ -62,8 +63,8 @@ if (isset($_POST) && count($_POST)) {
                 <label for="rpassword">Repeat password</label>
                 <input type="password" class="form-control" id="rpassword">
               </div>
-              <div class="d-grid gap-2 col-8 mx-auto">
-                <button type="submit" class="btn btn-block btn-primary">Register</button>
+              <div class="d-grid gap-2 col-12 mx-auto">
+                <button type="submit" class="btn btn-block btn-lg btn-primary">Register</button>
               </div>
             </form>
           </div>

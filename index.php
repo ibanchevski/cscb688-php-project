@@ -54,25 +54,25 @@ require_once('./head.php');
                                     <label for="email" class="form-label">Email</label>
                                     <div class="input-group">
                                         <span class="input-group-text text-muted"><i class="fas fa-at"></i></span>
-                                        <input type="email" class="form-control" name="email" id="email">
+                                        <input type="email" class="form-control" name="email" id="email" required>
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password</label>
                                     <div class="input-group">
                                         <span class="input-group-text text-muted"><i class="fas fa-key"></i></span>
-                                        <input type="password" class="form-control" name="password" id="password">
+                                        <input type="password" class="form-control" name="password" id="password" required>
                                     </div>
                                 </div>
                                 <div class="mb-3 form-check">
                                     <input type="checkbox" class="form-check-input" name="rememberMe" id="rememberMe">
                                     <label class="form-check-label" for="rememberMe">Remember me</label>
                                 </div>
-                                <div class="mb-3">
-                                    <p class="text-muted">Don't have an account? <a class="link-secondary" href="register.php">Register</a></p>
+                                <div class="d-grid gap-2 col-12 mx-auto mb-3">
+                                    <button type="submit" class="btn btn-block btn-lg btn-primary">Login&nbsp;<i class="fas fa-sign-in-alt"></i></button>
                                 </div>
-                                <div class="d-grid gap-2 col-8 mx-auto">
-                                    <button type="submit" class="btn btn-block btn-primary">Login&nbsp;<i class="fas fa-sign-in-alt"></i></button>
+                                <div>
+                                    <p class="text-muted text-center mb-0">Do not have an account? <a class="link-secondary" href="register.php">Register</a></p>
                                 </div>
                             </form>
                         </div>
