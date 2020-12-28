@@ -8,12 +8,17 @@ if (isset($_POST) && count($_POST)) {
 
     $findUserQuery = $db->query("select id,email,password from users where email='$email'");
 
-    $foundUser = $findUserQuery->fetch_array();
+    if (!$findUserQuery) {
+        $_SESSION['errormsg'] = "Invalid email or password!";
+    } else {
+        $foundUser = $findUserQuery->fetch_array();
 
-    if ($foundUser['email'] === $email) {
-        if (password_verify($password, $foundUser['password'])) {
-            $_SESSION['userid'] = $foundUser['id'];
-            header('location:dashboard.php');
+        if ($foundUser['email'] === $email) {
+            if (password_verify($password, $foundUser['password'])) {
+                $_SESSION['userid'] = $foundUser['id'];
+                header('location:dashboard.php');
+            }
+            $_SESSION['errormsg'] = 'Invalid email or password!';
         } else {
             $_SESSION['errormsg'] = 'Invalid email or password!';
         }
