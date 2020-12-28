@@ -41,3 +41,16 @@ function addCategory() {
     document.querySelector('.add-category-error').classList.add('d-none');
 }
 
+// eslint-disable-next-line
+function toggleCategoryRename(categoryId) {
+    // Hide category name
+    document.querySelector(`#category-${categoryId} h5`)
+        .classList
+        .toggle('d-none');
+
+    // Show edit input
+    document.querySelector(`#category-${categoryId} form[name="rename"]`)
+        .classList
+        .toggle('d-none');
+}
+
