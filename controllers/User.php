@@ -37,10 +37,14 @@ class User {
         return $user['id'];
     }
 
-    public static function register($name, $email, $password) {
-        $find_user = $conn->prepare('count users where email=:email', ["email"=>$email]);
-        var_dump($conn->query($find_user));
-        
+    public static function register($user) {
+        // TODO: Check if user exits
+        $db = (DBConnector::getInstance())->getConnection();
+        $insertUser = $db->prepare("insert into users(name, email, password) values (?,?,?)");
+        $hashedPassword = password_hash($user['password'], PASSWORD_BCRYPT);
+        $insertUser->execute([$user['name'], $user['email'], $hashedPassword]);
+
+        return $db->lastInsertId();
     }
 
     public static function getCategories($userid) {

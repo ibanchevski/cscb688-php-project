@@ -46,7 +46,8 @@ if (isset($_POST) && count($_POST)) {
               <a href="/" class="btn btn-sm btn-outline-secondary float-start"><i class="fas fa-arrow-left"></i></a>
               <h2>Register</h2>
             </div>
-            <form name="register" method="POST">
+            <form name="register" method="POST" action="utils/api.php">
+              <input type="hidden" name="action" value="register">
               <div class="mb-3">
                 <label for="name">Full name</label>
                 <input type="text" class="form-control" name="name" id="name">

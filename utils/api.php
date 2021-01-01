@@ -19,4 +19,19 @@ case 'login':
     }
 
     break;
+
+case 'register':
+    $user = array(
+        "name" => $_POST['name'],
+        "email" => $_POST['email'],
+        "password" => $_post['password']
+    );
+    $userid = Controllers\User::register($user);
+    $_SESSION['userid'] = $userid;
+    header('location:../dashboard.php');
+
+    break;
+case 'getcategories':
+    echo "asdffsfafdasfsdf"; 
+    break;
 }
