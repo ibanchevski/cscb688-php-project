@@ -53,7 +53,8 @@ require_once('./head.php');
                             <div class="card-title text-center">
                                 <h2>Login</h2>
                             </div>
-                            <form name="login" method="POST">
+                            <form name="login" method="POST" action="utils/api.php">
+                                <input type="hidden" name="action" value="login">
                                 <input type="hidden" name="auth_type" value="login">
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
