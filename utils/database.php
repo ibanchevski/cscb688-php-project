@@ -10,7 +10,7 @@ class DBConnector {
         global $DB_CONFIG;
 
         $host = $DB_CONFIG['host'];
-        $port = $DB_CONFIG['port'] || 3306;
+        $port = $DB_CONFIG['port'];
         $db   = $DB_CONFIG['dbname'];
         $user = $DB_CONFIG['user'];
         $pass = $DB_CONFIG['password'];
