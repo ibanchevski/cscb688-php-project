@@ -2,7 +2,7 @@
 
 namespace Controllers;
 
-require_once("../utils/database.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/utils/database.php");
 use Utils\DBConnector;
 
 class User {
@@ -47,22 +47,24 @@ class User {
         return $db->lastInsertId();
     }
 
-    public static function getCategories($userid) {
-        $db = (new DBConnector())->getConnection();
+
+    public static function validate($userId) {
+        $db = (DBConnector::getInstance())->getConnection();
+        $existQuery = $db->prepare('select exists(select id from users where id=? limit 1) as "user_exists"');
+        $existQuery->execute([$userId]);
+
+        if ($existQuery->fetch(\PDO::FETCH_ASSOC)['user_exists']) {
+            return 'valid';
+        }
+        return 'invalid';
+    }
+
+    public static function getCategories($userId) {
+        $db = (DBConnector::getInstance())->getConnection();
         $getQuery = $db->prepare("select id,name from user_categories where userid=?");
-        $getQuery->execute([$userid]);
+        $getQuery->execute([$userId]);
 
-        $categories = $getQuery->fetch(\PDO::FETCH_ASSOC);
-
-        if (!$findUserQuery) {
-            // TODO: Throw exception
-            return [];
-        }
-
-        if (!password_verify($password, $user['password'])) {
-            // TODO: Throw exception
-            return [];
-        }
+        $categories = $getQuery->fetchAll(\PDO::FETCH_ASSOC);
 
         return $categories;
     }

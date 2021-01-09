@@ -1,3 +1,4 @@
+
 (function() {
     document
         .querySelector('#newCategoryBtn')
@@ -6,6 +7,10 @@
     document
         .querySelector('#newCategoryForm')
         .addEventListener('submit', addCategory);
+
+    document
+        .querySelector('#logoutBtn')
+        .addEventListener('click', logout);
 })();
 
 function toggleCustomCategoryInput() {
@@ -54,3 +59,7 @@ function toggleCategoryRename(categoryId) {
         .toggle('d-none');
 }
 
+function logout() {
+    document.cookie = document.cookie.replace(/PHPSESSID=\w+;?/gi, 'PHPSESSID= ;expires=0');
+    window.location.replace('/index.php');
+}

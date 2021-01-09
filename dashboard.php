@@ -1,27 +1,25 @@
 <?php
 session_start();
-require_once("utils/database.php");
+require_once("controllers/User.php");
+require_once("controllers/Category.php");
 
-if (isset($_POST['customCategory']))
-{
-    $db->query('insert into user_categories(name,userid) values ("' .$_POST['customCategory']. '",' .$_SESSION['userid']. ')');
-    header('location:dashboard.php');
-}
-else if (isset($_POST['deleteCategory']))
-{
-    $db->query('delete from user_categories where id='.$_POST['deleteCategory']);
-    header('location:dashboard.php');
-}
-else if (isset($_POST['newCategoryName']))
-{
-    $db->query('update user_categories set name="'.$_POST['newCategoryName'].'" where id='.$_POST['catid']);
-    header('location:dashboard.php');
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    if (isset($_POST['deleteCategory'])) {
+        Controllers\Category::delete($_POST['deleteCategory']);
+    }
+
+    if (isset($_POST['newCategory'])) {
+        Controllers\Category::create($_POST['newCategory'], $_SESSION['userid']);
+    }
+
+    if (isset($_POST['newCategoryName'])) {
+        Controllers\Category::rename($_POST['newCategoryName'], $_POST['categoryId']);
+    }
+    //return header('location:dashboard.php');
 }
 
-$userid = $_SESSION['userid'];
-$q = $db->query("select email,name from users where id=$userid");
-$username = $q->fetch_assoc()['name'];
-$categories = $db->query("select id,name from user_categories where userid=$userid");
+$categories = Controllers\User::getCategories($_SESSION['userid']);
 ?>
 
 <!DOCTYPE html>
@@ -32,6 +30,11 @@ require_once('head.php');
 ?>
 <body>
     <div class="container">
+        <div class="row mb-5">
+            <div class="col-md-4 offset-md-8">
+                <button type="button" class="btn btn-secondary mt-3 float-end" id="logoutBtn">Log out</button>
+            </div>
+        </div>
         <div class="row my-5">
             <div class="col-sm">
                 <h1 class="text-center page-title">
@@ -49,7 +52,7 @@ require_once('head.php');
                     <p class="text-danger add-category-error d-none">Category already exists!</p>
                     <form name="newCategoryForm" id="newCategoryForm" method="post">
                         <div class="input-group">
-                            <input type="text" placeholder="Category name" name="customCategory" class="form-control" id="custom-category">
+                            <input type="text" placeholder="Category name" name="newCategory" class="form-control" id="custom-category">
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-secondary">Add</button>
                             </div>
@@ -66,7 +69,7 @@ require_once('head.php');
     </div>
 
     <?php
-    if (is_null($categories)) {
+    if (count($categories) === 0) {
         echo '
     <div class="container py-5">
         <div class="row no-categories">
@@ -90,24 +93,24 @@ require_once('head.php');
     <div class="container">
         <div class="row category-holder">
             <?php
-            while ($category = $categories->fetch_assoc()) {
+            foreach ($categories as $category) {
                 echo '
-                    <div class="col-sm category mb-3" id="category-'.$category['id'].'">
-                      <h5>' .$category["name"]. '</h5>
-                      <button type="button" class="btn btn-sm btn-outline-primary" onclick="toggleCategoryRename('.$category['id'].')"><i class="fas fa-pencil-alt"></i></button>
-                      <form method="post" name="rename" class="d-none">
-                        <div class="input-group">
-                          <input type="hidden" name="catid" value="'.$category['id'].'">
-                          <input type="text" class="form-control" name="newCategoryName" value="'.$category['name'].'">
-                          <button class="btn btn-outline-secondary" type="submit">Save</button>
-                        </div>
-                      </form>
-                      <form method="post" style="display: inline;">
-                        <input type="hidden" name="deleteCategory" value="'.$category["id"].'" style="width:0;">
-                        <button type="submit" class="btn btn-sm btn-danger float-end mt-3">Delete</button>
-                      </form>
+                <div class="col-sm category mb-3" id="category-'.$category['id'].'">
+                  <h5>' .$category["name"]. '</h5>
+                  <button type="button" class="btn btn-sm btn-outline-primary" onclick="toggleCategoryRename('.$category['id'].')"><i class="fas fa-pencil-alt"></i></button>
+                  <form method="post" name="rename" class="d-none">
+                    <div class="input-group">
+                      <input type="hidden" name="categoryId" value="'.$category['id'].'">
+                      <input type="text" class="form-control" name="newCategoryName" value="'.$category['name'].'">
+                      <button class="btn btn-outline-secondary" type="submit">Save</button>
                     </div>
-                        ';
+                  </form>
+                  <form method="post" style="display: inline;">
+                    <input type="hidden" name="deleteCategory" value="'.$category["id"].'" style="width:0;">
+                    <button type="submit" class="btn btn-sm btn-danger float-end mt-3">Delete</button>
+                  </form>
+                </div>
+                ';
             }
             ?>
         </div>
