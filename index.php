@@ -1,31 +1,20 @@
 <?php
 session_start();
-require_once('utils/database.php');
+require_once("controllers/User.php");
 
-if (isset($_POST) && count($_POST)) {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+use Controllers;
 
-    $findUserQuery = $db->query("select id,email,password from users where email='$email'");
+if (isset($_SESSION['userid'])) {
+    // Check if valid sessionid and transit to dashboard
+    $userState = Controllers\User::validate($_SESSION['userid']);
 
-    if (!$findUserQuery) {
-        $_SESSION['errormsg'] = "Invalid email or password!";
-    } else {
-        $foundUser = $findUserQuery->fetch_array();
-
-        if ($foundUser['email'] === $email) {
-            if (password_verify($password, $foundUser['password'])) {
-                $_SESSION['userid'] = $foundUser['id'];
-                header('location:dashboard.php');
-            }
-            $_SESSION['errormsg'] = 'Invalid email or password!';
-        } else {
-            $_SESSION['errormsg'] = 'Invalid email or password!';
-        }
+    if ($userState === 'valid') {
+       return header('location:dashboard.php');
     }
 }
-?>
 
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <?php
@@ -53,7 +42,8 @@ require_once('./head.php');
                             <div class="card-title text-center">
                                 <h2>Login</h2>
                             </div>
-                            <form name="login" method="POST">
+                            <form name="login" method="POST" action="utils/api.php">
+                                <input type="hidden" name="action" value="login">
                                 <input type="hidden" name="auth_type" value="login">
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
