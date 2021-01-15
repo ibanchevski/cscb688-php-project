@@ -28,21 +28,9 @@ $categories = Controllers\User::getCategories($_SESSION['userid']);
 $CURR_TITLE = 'Dashboard';
 require_once('head.php');
 ?>
-<body>
+    <body>
+        <?php require_once("navbar.php") ?>
     <div class="container">
-        <div class="row mb-5">
-            <div class="col-md-4 offset-md-8">
-                <button type="button" class="btn btn-secondary mt-3 float-end" id="logoutBtn">Log out</button>
-            </div>
-        </div>
-        <div class="row my-5">
-            <div class="col-sm">
-                <h1 class="text-center page-title">
-                    Where did my money go?
-                    <br><small class="text-muted">Simple money manager</small>
-                </h1>
-            </div>
-        </div>
         <div class="row">
             <div class="col-sm">
                 <button type="button" class="category-btn" id="newCategoryBtn">

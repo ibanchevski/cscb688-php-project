@@ -23,10 +23,10 @@ body {
     font-weight: bold;
     text-transform: uppercase;
 }
-.page-title small {
-    text-transform: none;
-    font-size: 0.7em;
-}
+/* .page-title small { */
+/*     text-transform: none; */
+/*     font-size: 0.7em; */
+/* } */
 
 .no-categories h3 {
     color: #4c85f2;

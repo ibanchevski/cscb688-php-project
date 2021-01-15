@@ -23,6 +23,14 @@ require_once('./head.php');
 ?>
     <body>
         <div class="container d-flex flex-column justify-content-center" style="height: 100vh">
+            <div class="row mb-5">
+                <div class="col-sm text-center">
+                    <h1 class="page-title">
+                        Where did my money go?
+                    </h1>
+                    <p class="text-muted">Simple expenses manager</p>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm-4 offset-lg-4">
                     <?php
