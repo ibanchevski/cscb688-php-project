@@ -60,6 +60,8 @@ function toggleCategoryRename(categoryId) {
 }
 
 function logout() {
+    // Remove session cookie
     document.cookie = document.cookie.replace(/PHPSESSID=\w+;?/gi, 'PHPSESSID= ;expires=0');
-    window.location.replace('/index.php');
+    // Redirect to login
+    window.location.href = '/';
 }
