@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['newCategoryName'])) {
         Controllers\Category::rename($_POST['newCategoryName'], $_POST['categoryId']);
     }
-    //return header('location:dashboard.php');
+    return header('location:dashboard.php');
 }
 
 $categories = Controllers\User::getCategories($_SESSION['userid']);
@@ -30,32 +30,35 @@ require_once('head.php');
 ?>
     <body>
         <?php require_once("navbar.php") ?>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm">
-                <button type="button" class="category-btn" id="newCategoryBtn">
-                    <i class="fas fa-plus"></i>&nbsp;New category
-                </button>
-                <div class="d-none custom-category-holder mt-3">
-                    <p class="text-danger add-category-error d-none">Category already exists!</p>
-                    <form name="newCategoryForm" id="newCategoryForm" method="post">
-                        <div class="input-group">
-                            <input type="text" placeholder="Category name" name="newCategory" class="form-control" id="custom-category">
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-secondary">Add</button>
-                            </div>
-                        </div>
-                    </form>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h1>Dashboard</h1>
                 </div>
             </div>
-            <div class="col-sm">
-                <h4 class="text-muted mt-3 float-right">
-                    Total monthly expense: <span class="monthly-expense"></span>лв.
-                </h4>
+            <div class="row">
+                <div class="col-sm-4">
+                    <button type="button" class="category-btn" id="newCategoryBtn">
+                        <i class="fas fa-plus"></i>&nbsp;New category
+                    </button>
+                    <div class="d-none custom-category-holder mt-3">
+                        <p class="text-danger add-category-error d-none">Category already exists!</p>
+                        <form name="newCategoryForm" id="newCategoryForm" method="post">
+                            <div class="input-group">
+                                <input type="text" placeholder="Category name" name="newCategory" class="form-control" id="custom-category">
+                                <button type="submit" class="btn btn-primary-purple">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-sm-4 offset-md-4">
+                    <h4 class="text-muted float-end">
+                        Total monthly expense: <span class="monthly-expense"></span>лв.
+                    </h4>
+                </div>
             </div>
+            <hr>
         </div>
-    </div>
-
     <?php
     if (count($categories) === 0) {
         echo '
@@ -78,16 +81,15 @@ require_once('head.php');
         ';
     }
     ?>
-    <div class="container">
-        <div class="row category-holder">
+        <div class="container category-holder">
             <?php
             $rows = count($categories) / 4;
             $lastInd = 0;
             for ($ii = 0; $ii < $rows; $ii++) {
                 echo '<div class="row">';
                 for ($i = $lastInd; $i < (count($categories) / $rows) + $lastInd; $i++) {
+                    if (!isset($categories[$i])) { continue; }
                     $category = $categories[$i];
-                    if (!$category) { continue; }
                     echo '<div class="col category mb-3 shadow-sm" id="category-'.$category['id'].'">
                     <h5>' .$category["name"]. '</h5>
                     <button type="button" class="btn btn-sm btn-outline-primary" onclick="toggleCategoryRename('.$category['id'].')"><i class="fas fa-pencil-alt"></i></button>
@@ -110,7 +112,6 @@ require_once('head.php');
             }
             ?>
         </div>
-    </div>
     <a href="#" class="new-log-btn" id="addRecordBtn" title="Add record">
         <i class="fas fa-plus"></i>
     </a>

@@ -1,5 +1,5 @@
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background-color: #ecf0f1;
 }
 
@@ -15,6 +15,11 @@ body {
     .add-record-modal .inside {
         width: 80%;
     }
+}
+
+.btn.btn-primary-purple {
+    color: #fff;
+    background-color: #4c85f2;
 }
 
 .page-title {
