@@ -18,7 +18,6 @@ case 'login':
     }
 
     break;
-
 case 'register':
     $user = array(
         "name" => $_POST['name'],
@@ -30,7 +29,13 @@ case 'register':
     header('location:../dashboard.php');
 
     break;
-case 'getcategories':
-    echo "asdffsfafdasfsdf"; 
+case 'updateUser':
+    $user = array(
+        "name" => $_POST['name'],
+        "email" => $_POST['email'],
+        "password" => $_post['password']
+    );
+    Controllers\User::update($_SESSION['userid'], $user);
+    header('location:../settings.php');
     break;
 }

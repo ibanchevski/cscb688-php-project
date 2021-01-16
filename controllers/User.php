@@ -78,4 +78,10 @@ class User {
 
         return $categories;
     }
+
+    public static function update($userId, $newUser) {
+        $db = (DBConnector::getInstance())->getConnection();
+        $updateQ = $db->prepare("update users set name=?,email=? where id=?");
+        $updateQ->execute([$newUser['name'], $newUser['email'], $userId]);
+    }
 }
