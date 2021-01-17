@@ -41,37 +41,6 @@ body {
     overflow-y: auto;
 }
 
-.category h5 {
-    display: inline-block;
-    font-size: 16px;
-    color: #4d4d4d;
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-top: 1em;
-    margin-bottom: 1.2em;
-}
-
-.delete-cat-btn {
-    float: right;
-    margin-top: 1.5em;
-}
-
-button.category-btn {
-    border: none;
-    border-radius: 3px;
-    padding: 0.5em 1em;
-    margin: 0;
-    background-color: #4c85f2;
-    color: #fff;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1em;
-    box-shadow: 1px 1px 3px -1px rgba(0,0,0,0.3);
-    transition: 300ms;
-}
-button.category-btn:hover {
-    background-color: #2463db;
-}
-
 .new-log-btn {
     display: block;
     position: fixed;

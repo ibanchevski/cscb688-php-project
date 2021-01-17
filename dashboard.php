@@ -31,14 +31,14 @@ require_once('head.php');
     <body>
         <?php require_once("navbar.php") ?>
         <div class="container">
-            <div class="row">
+            <div class="row mb-lg-5">
                 <div class="col-md-4">
-                    <h1>Dashboard</h1>
+                    <h1 class="page-title">Dashboard</h1>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-4">
-                    <button type="button" class="category-btn" id="newCategoryBtn">
+                    <button type="button" class="btn btn-primary-purple" id="newCategoryBtn">
                         <i class="fas fa-plus"></i>&nbsp;New category
                     </button>
                     <div class="d-none custom-category-holder mt-3">
@@ -51,7 +51,13 @@ require_once('head.php');
                         </form>
                     </div>
                 </div>
-                <div class="col-sm-4 offset-md-4">
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="search" value="" placeholder="Search...">
+                        <button type="submit" class="btn btn-primary-purple">Search</button>
+                    </div>
+                </div>
+                <div class="col-sm-4">
                     <h4 class="text-muted float-end">
                         Total monthly expense: <span class="monthly-expense"></span>лв.
                     </h4>
@@ -90,22 +96,28 @@ require_once('head.php');
                 for ($i = $lastInd; $i < (count($categories) / $rows) + $lastInd; $i++) {
                     if (!isset($categories[$i])) { continue; }
                     $category = $categories[$i];
-                    echo '<div class="col category mb-3 shadow-sm" id="category-'.$category['id'].'">
-                    <h5>' .$category["name"]. '</h5>
-                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="toggleCategoryRename('.$category['id'].')"><i class="fas fa-pencil-alt"></i></button>
-                    <form method="post" name="rename" class="d-none">
-                    <div class="input-group">
-                    <input type="hidden" name="categoryId" value="'.$category['id'].'">
-                    <input type="text" class="form-control" name="newCategoryName" value="'.$category['name'].'">
-                    <button class="btn btn-outline-secondary" type="submit">Save</button>
+                    echo '
+                    <div class="col category mb-3 shadow-sm" id="category-'.$category['id'].'">
+                      <div class="mb-2 d-flex justify-content-end">
+                        <button type="button" class="btn btn-sm btn-primary-purple border-top-0 rounded-0 rounded-bottom me-2 shadow-sm" onclick="toggleCategoryRename('.$category['id'].')">
+                          <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <form method="post" style="display: inline;">
+                          <input type="hidden" name="deleteCategory" value="'.$category["id"].'" style="width:0;">
+                          <button type="submit" class="btn btn-sm btn-danger border-top-0 rounded-0 rounded-bottom shadow-sm"><i class="far fa-trash-alt"></i></button>
+                        </form>
+                      </div>
+                      <h4 class="fw-bold pw-3" style="color: #4c85f2">' .$category["name"]. '</h4>
+                      <form method="post" name="rename" class="d-none">
+                         <input type="hidden" name="categoryId" value="'.$category['id'].'">
+                         <div class="input-group">
+                           <input type="text" class="form-control" name="newCategoryName" value="'.$category['name'].'">
+                           <button class="btn btn-primary-purple" type="submit">Save</button>
+                         </div>
+                       </form>
+                      <hr>
                     </div>
-                    </form>
-                    <form method="post" style="display: inline;">
-                    <input type="hidden" name="deleteCategory" value="'.$category["id"].'" style="width:0;">
-                    <button type="submit" class="btn btn-sm btn-danger float-end mt-3">Delete</button>
-                    </form>
-                    </div>
-                    ';
+                            ';
                 }
                 $lastInd = $i;
                 echo '</div>';
