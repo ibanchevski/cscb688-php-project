@@ -4,12 +4,8 @@ body {
 }
 
 @media only screen and (max-width: 480px) {
-    .container {
-        padding: 0;
-    }
-
     .page-title {
-        font-size: 1.5em;
+        font-size: 32px;
     }
 
     .add-record-modal .inside {
@@ -34,57 +30,16 @@ body {
 }
 
 .category {
-    height: 70vh;
+    min-height: 350px;
     border-radius: 3px;
     margin-right: 1em;
     background-color: #f5f5f5;
     overflow-y: auto;
 }
 
-.new-log-btn {
-    display: block;
-    position: fixed;
-    bottom: 30px;
-    right: 50px;
-    width: 60px;
-    height: 60px;
-    text-align: center;
-    vertical-align: middle;
-    font-size: 1.4em;
-    margin-bottom: 1em;
-    margin-right: 1em;
-    border-radius: 50%;
-    color: #fff;
-    background-color: #4c85f2;
-    box-shadow: 1px 2px 3px 2px rgba(0,0,0,0.3);
-    transition: 150ms;
-}
-.new-log-btn.disabled,
-.new-log-btn.disabled:hover,
-.new-log-btn.disabled:active {
-    background-color: #8fa2c2;
-    cursor: not-allowed;
-    box-shadow: 0px 0px 2px 1px;
-}
-.new-log-btn i {
-    display: inline-block;
-    font-size: 1.3em;
-    position: relative;
-    top: 15px;
-}
-.new-log-btn:hover {
-    color: #fff;
-    background-color: #3e70cf;
-}
-.new-log-btn:active {
-    box-shadow: none;
-    transform: translateY(1px);
-}
-
 .add-record-modal {
-    display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 99999;
     left: 0;
     top: 0;
     width: 100%;
@@ -94,15 +49,13 @@ body {
     background-color: rgba(0,0,0,0.3);
     transition: 3s;
 }
+
 .add-record-modal .inside {
     background-color: #fefefe;
     margin: 15% auto;
     padding: 25px;
     width: 40%;
     border-radius: 3px;
-}
-.add-record-modal.visible {
-    display: block;
 }
 
 .inside h3 {
@@ -112,24 +65,6 @@ body {
     text-transform: uppercase;
     font-weight: bold;
     font-size: 1.3em;
-}
-
-.modal-cancel-btn {
-    border: none;
-    border-radius: 3px;
-    padding: 0.5em 1em;
-    margin: 0;
-    background-color: #f0134d;
-    color: #fff;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1em;
-    font-weight: bold;
-    box-shadow: 1px 1px 3px -1px rgba(0,0,0,0.3);
-    transition: 300ms;
-}
-
-.modal-cancel-btn:hover {
-    background-color: #ce0e40;
 }
 
 .log-wrapper {

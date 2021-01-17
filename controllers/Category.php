@@ -23,4 +23,10 @@ class Category {
         $renameQuery = $conn->prepare('update user_categories set name=? where id=?');
         $renameQuery->execute([$newName, $categoryId]);
     }
+
+    public static function addExpense($expense) {
+        $conn = (DBConnector::getInstance())->getConnection();
+        $addQuery = $conn->prepare('insert into expenses(amount,description,categoryid,date) values(?,?,?, NOW())');
+        $addQuery->execute([$expense['amount'], $expense['description'], $expense['categoryid']]);
+    }
 }

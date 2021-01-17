@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once("../controllers/User.php");
+require_once("../controllers/Category.php");
 
 $action = $_POST['action'];
 echo $action;
@@ -37,5 +38,14 @@ case 'updateUser':
     );
     Controllers\User::update($_SESSION['userid'], $user);
     header('location:../settings.php');
+    break;
+case 'newEntry':
+    $entry = array(
+        "amount" => floatval($_POST["amount"]),
+        "description" => $_POST["description"],
+        "categoryid" => intval($_POST["category"])
+    );
+    Controllers\Category::addExpense($entry);
+    header('location:../dashboard.php');
     break;
 }

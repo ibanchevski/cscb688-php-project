@@ -38,9 +38,14 @@ require_once('head.php');
             </div>
             <div class="row">
                 <div class="col-sm-4">
-                    <button type="button" class="btn btn-primary-purple" id="newCategoryBtn">
-                        <i class="fas fa-plus"></i>&nbsp;New category
-                    </button>
+                    <div class="d-grid gap-2 d-md-block">
+                        <button type="button" class="btn btn-primary-purple" id="newCategoryBtn">
+                            Add category
+                        </button>
+                        <button type="button" class="btn btn-primary-purple" id="addEntryBtn">
+                            Add entry
+                        </button>
+                    </div>
                     <div class="d-none custom-category-holder mt-3">
                         <p class="text-danger add-category-error d-none">Category already exists!</p>
                         <form name="newCategoryForm" id="newCategoryForm" method="post">
@@ -53,6 +58,7 @@ require_once('head.php');
                 </div>
                 <div class="col-sm-4">
                     <div class="input-group">
+                        <div class="input-group-text" ><i class="fas fa-search"></i></div>
                         <input type="text" class="form-control" name="search" value="" placeholder="Search...">
                         <button type="submit" class="btn btn-primary-purple">Search</button>
                     </div>
@@ -97,7 +103,7 @@ require_once('head.php');
                     if (!isset($categories[$i])) { continue; }
                     $category = $categories[$i];
                     echo '
-                    <div class="col category mb-3 shadow-sm" id="category-'.$category['id'].'">
+                    <div class="col-sm category mb-3 shadow-sm" id="category-'.$category['id'].'">
                       <div class="mb-2 d-flex justify-content-end">
                         <button type="button" class="btn btn-sm btn-primary-purple border-top-0 rounded-0 rounded-bottom me-2 shadow-sm" onclick="toggleCategoryRename('.$category['id'].')">
                           <i class="fas fa-pencil-alt"></i>
@@ -124,9 +130,6 @@ require_once('head.php');
             }
             ?>
         </div>
-    <a href="#" class="new-log-btn" id="addRecordBtn" title="Add record">
-        <i class="fas fa-plus"></i>
-    </a>
     <div class="add-record-modal d-none">
         <div class="inside">
             <div class="row">
@@ -142,23 +145,31 @@ require_once('head.php');
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label for="logAmount">Amount spent:</label>
-                        <input type="number" class="form-control" min="0" value="0.0" step="0.01" id="logAmount">
-                    </div>
-                    <div class="form-group">
-                        <label for="logDescription">Description (optional)</label>
-                        <textarea placeholder="Description" class="form-control" id="logDescription"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <select id="modal-categories" class="form-control"></select>
-                    </div>
-                    <button type="button" class="modal-add-btn category-btn">Save</button>
-                    <button type="button" class="modal-cancel-btn">Cancel</button>
+            <form class="row g-3" action="utils/api.php" method="POST">
+                <input type="hidden" name="action" value="newEntry">
+                <div class="col-sm-12">
+                    <label for="logAmount">Amount spent:</label>
+                    <input type="number" name="amount" class="form-control" min="0" value="0.0" step="0.01" id="logAmount">
                 </div>
-            </div>
+                <div class="col-sm-12">
+                    <label for="logDescription">Description (optional)</label>
+                    <textarea name="description" class="form-control" id="logDescription" placeholder="Description"></textarea>
+                </div>
+                <div class="col-sm-12">
+                    <label for="category">Select category</label>
+                    <select id="modal-categories" name="category" class="form-select">
+                        <?php
+                        foreach ($categories as $category) {
+                            echo '<option value="'.$category["id"].'">'.$category["name"].'</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="d-grid gap-2 d-md-block">
+                    <button type="submit" class="btn btn-primary-purple modal-add-btn">Save</button>
+                    <button type="button" id="modalCancelBtn" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
         </div>
     </div>
     <script src="assets/scripts.js"></script>

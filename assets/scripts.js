@@ -11,6 +11,10 @@
     document
         .querySelector('#logoutBtn')
         .addEventListener('click', logout);
+
+    document
+        .querySelector('#addEntryBtn')
+        .addEventListener('click', openAddEntryModal)
 })();
 
 function toggleCustomCategoryInput() {
@@ -64,4 +68,15 @@ function logout() {
     document.cookie = document.cookie.replace(/PHPSESSID=\w+;?/gi, 'PHPSESSID= ;expires=0');
     // Redirect to login
     window.location.href = '/';
+}
+
+function openAddEntryModal() {
+    const newRecordModal = document.querySelector('.add-record-modal');
+    newRecordModal.classList.remove('d-none');
+
+    document
+        .querySelector('#modalCancelBtn')
+        .addEventListener('click', () => {
+            newRecordModal.classList.add('d-none');
+        });
 }
