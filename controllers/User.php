@@ -71,10 +71,30 @@ class User {
 
     public static function getCategories($userId) {
         $db = (DBConnector::getInstance())->getConnection();
-        $getQuery = $db->prepare("select id,name from user_categories where userid=?");
+        $statement = "select user_categories.id, name, expenses.id as entryid, description,amount,date from user_categories left join expenses on categoryid=user_categories.id where userid=?";
+        $getQuery = $db->prepare($statement);
         $getQuery->execute([$userId]);
 
-        $categories = $getQuery->fetchAll(\PDO::FETCH_ASSOC);
+        $categoriesEntries = $getQuery->fetchAll(\PDO::FETCH_ASSOC);
+        $categories = array();
+
+        foreach ($categoriesEntries as $entry) {
+            if (!isset($categories[$entry["name"]])) {
+                $categories[$entry["name"]] = array(
+                    "catid" => $entry["id"],
+                    "expenses" => []
+                );
+            }
+
+            if ($entry["entryid"] === NULL) { continue; }
+
+            $categories[$entry["name"]]["expenses"][] = array (
+                "id" => $entry["entryid"],
+                "description" => $entry["description"],
+                "amount" => $entry["amount"],
+                "date" => $entry["date"],
+            );
+        }
 
         return $categories;
     }

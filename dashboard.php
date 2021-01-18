@@ -95,39 +95,49 @@ require_once('head.php');
     ?>
         <div class="container category-holder">
             <?php
-            $rows = count($categories) / 4;
-            $lastInd = 0;
-            for ($ii = 0; $ii < $rows; $ii++) {
-                echo '<div class="row">';
-                for ($i = $lastInd; $i < (count($categories) / $rows) + $lastInd; $i++) {
-                    if (!isset($categories[$i])) { continue; }
-                    $category = $categories[$i];
-                    echo '
-                    <div class="col-sm category mb-3 shadow-sm" id="category-'.$category['id'].'">
-                      <div class="mb-2 d-flex justify-content-end">
-                        <button type="button" class="btn btn-sm btn-primary-purple border-top-0 rounded-0 rounded-bottom me-2 shadow-sm" onclick="toggleCategoryRename('.$category['id'].')">
-                          <i class="fas fa-pencil-alt"></i>
-                        </button>
-                        <form method="post" style="display: inline;">
-                          <input type="hidden" name="deleteCategory" value="'.$category["id"].'" style="width:0;">
-                          <button type="submit" class="btn btn-sm btn-danger border-top-0 rounded-0 rounded-bottom shadow-sm"><i class="far fa-trash-alt"></i></button>
-                        </form>
-                      </div>
-                      <h4 class="fw-bold pw-3" style="color: #4c85f2">' .$category["name"]. '</h4>
-                      <form method="post" name="rename" class="d-none">
-                         <input type="hidden" name="categoryId" value="'.$category['id'].'">
-                         <div class="input-group">
-                           <input type="text" class="form-control" name="newCategoryName" value="'.$category['name'].'">
-                           <button class="btn btn-primary-purple" type="submit">Save</button>
-                         </div>
-                       </form>
-                      <hr>
-                    </div>
-                            ';
+            echo '<div class="row">';
+            $currColInd = 0;
+            foreach($categories as $key => $value) {
+                /* echo "name: ".$key."<br>";
+                 * echo "catid: ".$value['catid']."<br>";
+                 * echo "entries:<br>";
+                 * var_dump($value['expenses']); */
+                if ($currColInd % 4 == 0) {
+                    echo '</div><div class="row">';
                 }
-                $lastInd = $i;
+                echo '<div class="col-sm category mb-3 shadow-sm" id="category-'.$value["catid"].'">';
+                echo '  <div class="mb-2 d-flex justify-content-end">
+                          <button type="button" class="btn btn-sm btn-primary-purple border-top-0 rounded-0 rounded-bottom me-2 shadow-sm" onclick="toggleCategoryRename('.$category['id'].')">
+                            <i class="fas fa-pencil-alt"></i>
+                          </button>
+                          <form method="post" style="display: inline;">
+                            <input type="hidden" name="deleteCategory" value="'.$value["catid"].'" style="width:0;">
+                            <button type="submit" class="btn btn-sm btn-danger border-top-0 rounded-0 rounded-bottom shadow-sm"><i class="far fa-trash-alt"></i></button>
+                          </form>
+                        </div>
+                        <h4 class="fw-bold pw-3" style="color: #4c85f2">'.$key.'</h4>
+                        <form method="post" name="rename" class="d-none">
+                           <input type="hidden" name="categoryId" value="'.$value["catid"].'">
+                           <div class="input-group">
+                             <input type="text" class="form-control" name="newCategoryName" value="'.$category['name'].'">
+                             <button class="btn btn-primary-purple" type="submit">Save</button>
+                           </div>
+                         </form>
+                         <hr>';
+                
+                foreach($value["expenses"] as $expense) {
+                    echo '<div class="log-wrapper" id="'.$expense["id"].'">';
+                    echo '<button type="button" class="btn btn-sm btn-danger"><i class="far fa-trash-alt"></i></button>';
+                    echo '<div class="log-date">'.$expense["date"].'</div>';
+                    echo '<div class="log-description">'.$expense["description"].'</div>';
+                    echo '<div class="log-amount">'.$expense["amount"].'</div>';
+                    echo '</div>';
+                }
+                
                 echo '</div>';
+                $currColInd++;
             }
+            echo '</div>';
             ?>
         </div>
     <div class="add-record-modal d-none">
