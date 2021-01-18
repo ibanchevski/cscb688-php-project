@@ -53,7 +53,7 @@ function addCategory() {
 // eslint-disable-next-line
 function toggleCategoryRename(categoryId) {
     // Hide category name
-    document.querySelector(`#category-${categoryId} h5`)
+    document.querySelector(`#category-${categoryId} .category-name`)
         .classList
         .toggle('d-none');
 
