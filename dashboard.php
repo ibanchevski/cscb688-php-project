@@ -134,7 +134,7 @@ require_once('head.php');
                     echo '<button type="button" class="btn btn-sm btn-danger"><i class="far fa-trash-alt"></i></button>';
                     echo '<div class="log-date">'.$expense["date"].'</div>';
                     echo '<div class="log-description">'.$expense["description"].'</div>';
-                    echo '<div class="log-amount">'.$expense["amount"].'</div>';
+                    echo '<div class="log-amount">'.number_format((float)$expense["amount"], 2, '.', '').' лв.</div>';
                     echo '</div>';
                 }
                 
