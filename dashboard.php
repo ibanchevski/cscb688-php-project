@@ -173,8 +173,8 @@ require_once('head.php');
                     <label for="category">Select category</label>
                     <select id="modal-categories" name="category" class="form-select">
                         <?php
-                        foreach ($categories as $category) {
-                            echo '<option value="'.$category["id"].'">'.$category["name"].'</option>';
+                        foreach ($categories as $name => $category) {
+                            echo '<option value="'.$category["catid"].'">'.$name.'</option>';
                         }
                         ?>
                     </select>
