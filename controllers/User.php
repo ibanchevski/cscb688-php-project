@@ -77,7 +77,9 @@ class User {
 
         if ($search != "") {
             $statement .= " and (name like ? or description like ? or amount like ?)";
-            $params = [$userId, $search, $search, $search];
+            $rawSearch = $search;
+            $search = '%'.$search.'%';
+            $params = [$userId, $search, $search, $rawSearch];
         }
 
         $getQuery = $db->prepare($statement);
