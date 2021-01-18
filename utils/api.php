@@ -52,7 +52,10 @@ case 'newEntry':
         "description" => $_POST["description"],
         "categoryid" => intval($_POST["category"])
     );
+
     Controllers\Category::addExpense($entry);
+    Controllers\User::addExpenses($_SESSION['userid'], $entry["amount"]);
+
     header('location:../dashboard.php');
     break;
 }

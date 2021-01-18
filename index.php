@@ -67,10 +67,6 @@ require_once('./head.php');
                                         <input type="password" class="form-control" name="password" id="password" required>
                                     </div>
                                 </div>
-                                <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" name="rememberMe" id="rememberMe">
-                                    <label class="form-check-label" for="rememberMe">Remember me</label>
-                                </div>
                                 <div class="d-grid gap-2 col-12 mx-auto mb-3">
                                     <button type="submit" class="btn btn-block btn-lg btn-primary">Login&nbsp;<i class="fas fa-sign-in-alt"></i></button>
                                 </div>

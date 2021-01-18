@@ -125,4 +125,10 @@ class User {
         $updateQ = $db->prepare("update users set name=?,email=? where id=?");
         $updateQ->execute([$newUser['name'], $newUser['email'], $userId]);
     }
+
+    public function addExpenses($userId, $amount) {
+        $db = (DBConnector::getInstance())->getConnection();
+        $updateQ = $db->prepare("update users set total_expenses = total_expenses + ? where id=?");
+        $updateQ->execute([$amount, $userId]);
+    }
 }
