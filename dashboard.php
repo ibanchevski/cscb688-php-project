@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['newCategoryName'])) {
         Controllers\Category::rename($_POST['newCategoryName'], $_POST['categoryId']);
     }
-    return header('location:dashboard.php');
+//    return header('location:dashboard.php');
 }
 
 $search = '';
@@ -47,7 +47,7 @@ require_once('head.php');
                         <button type="button" class="btn btn-primary-purple" id="newCategoryBtn">
                             Add category
                         </button>
-                        <button type="button" class="btn btn-primary-purple" id="addEntryBtn">
+                        <button type="button" class="btn btn-primary-purple <?php if (count($categories) == 0) {echo "disabled";} ?>" id="addEntryBtn">
                             Add entry
                         </button>
                     </div>
@@ -72,7 +72,7 @@ require_once('head.php');
                 </div>
                 <div class="col-sm-4">
                     <h4 class="text-muted float-end">
-                        Total monthly expense: <span class="monthly-expense"></span>лв.
+                        Total monthly expense: <span class="monthly-expense"><?php echo number_format((float)$user["total_expenses"], 2, '.', ''); ?></span>лв.
                     </h4>
                 </div>
             </div>

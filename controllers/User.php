@@ -50,7 +50,7 @@ class User {
     public static function getById($id) {
         $db = (DBConnector::getInstance())->getConnection();
 
-        $findUserQuery = $db->prepare("select name,email from users where id=?");
+        $findUserQuery = $db->prepare("select name,email,total_expenses from users where id=?");
         $findUserQuery->execute([$id]);
 
         $user = $findUserQuery->fetch(\PDO::FETCH_ASSOC);
