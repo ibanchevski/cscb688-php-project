@@ -1,22 +1,8 @@
 <?php
 session_start();
-require_once('utils/database.php');
-if (isset($_POST) && count($_POST)) {
-  $email = $_POST['email'];
-  $password = $_POST['password'];
-  $name = $_POST['name'];
 
-  $cnt = $db->query("select count(id) as userscnt from users where email='$email'");
-  $cnt = (int)$cnt->fetch_array()['userscnt'];
-
-  if ($cnt !== 0) {
-    $error = 'User already exists!';
-  } else {
-      $password = password_hash($password, PASSWORD_BCRYPT);
-      $db->query("insert into users(name, email, password) values('$name','$email','$password')");
-      $_SESSION['userid'] = $db->insert_id;
-      header('location:dashboard.php');
-  }
+if (isset($_SESSION['error'])) {
+    $error = $_SESSION['error'];
 }
 ?>
 
@@ -33,7 +19,8 @@ if (isset($_POST) && count($_POST)) {
       <div class="col-sm-4 offset-lg-4">
         <?php
           if (isset($error)) {
-          echo "<div class='alert alert-danger'>$error</div>";
+              echo "<div class='alert alert-danger'>$error</div>";
+              $_SESSION['error'] = null;
           }
         ?>
       </div>

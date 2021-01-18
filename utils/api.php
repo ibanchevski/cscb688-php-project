@@ -4,29 +4,36 @@ require_once("../controllers/User.php");
 require_once("../controllers/Category.php");
 
 $action = $_POST['action'];
-echo $action;
 
 switch ($action) {
 case 'login':
-    $userid = Controllers\User::authenticate($_POST['email'],$_POST['password']);
+    $userid = NULL;
 
-    if ($userid === null) {
-        $_SESSION['errormsg'] = 'Invalid email or password!';
-        header('location:../index.php');
-    } else {
+    try {
+        $userid = Controllers\User::authenticate($_POST['email'],$_POST['password']);
         $_SESSION['userid'] = $userid;
-        header('location:../dashboard.php');
+    } catch (Controllers\UserException $e) {
+        $_SESSION['error'] = $e->getMessage();
     }
 
+    header('location:../index.php');
     break;
+
 case 'register':
     $user = array(
         "name" => $_POST['name'],
         "email" => $_POST['email'],
         "password" => $_post['password']
     );
-    $userid = Controllers\User::register($user);
-    $_SESSION['userid'] = $userid;
+
+    try {
+        $userid = Controllers\User::register($user);
+        $_SESSION['userid'] = $userid;
+    } catch (Controllers\UserException $e) {
+        $_SESSION['error'] = $e->getMessage();
+        header('location:../register.php');
+        break;
+    }
     header('location:../dashboard.php');
 
     break;

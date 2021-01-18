@@ -5,6 +5,12 @@ namespace Controllers;
 require_once($_SERVER['DOCUMENT_ROOT']."/utils/database.php");
 use Utils\DBConnector;
 
+class UserException extends \Exception {
+    public function __construct($message, $code = 0, Exception $previous = null) {
+        parent::__construct($message, $code, $previous);
+    }
+}
+
 class User {
     private $id;
     private $email;
@@ -25,21 +31,26 @@ class User {
         $user = $findUserQuery->fetch(\PDO::FETCH_ASSOC);
 
         if (!$findUserQuery) {
-            // TODO: Throw exception
-            return null;
+            throw new UserException("Invalid email or password!");
         }
 
         if (!password_verify($password, $user['password'])) {
-            // TODO: Throw exception
-            return null;
+            throw new UserException("Invalid email or password!");
         }
 
         return $user['id'];
     }
 
     public static function register($user) {
-        // TODO: Check if user exits
         $db = (DBConnector::getInstance())->getConnection();
+
+        $getUser = $db->prepare("select email from users where email=? limit 1");
+        $getUser->execute([$user["email"]]);
+
+        if (count($getUser->fetchAll()) > 0) {
+            throw new UserException("User with this email already exists!");
+        }
+        
         $insertUser = $db->prepare("insert into users(name, email, password) values (?,?,?)");
         $hashedPassword = password_hash($user['password'], PASSWORD_BCRYPT);
         $insertUser->execute([$user['name'], $user['email'], $hashedPassword]);

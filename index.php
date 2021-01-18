@@ -35,9 +35,9 @@ require_once('./head.php');
                 <div class="col-sm-4 offset-lg-4">
                     <?php
 
-                    if (isset($_SESSION['errormsg'])) {
-                        echo "<div class='alert alert-danger'>" . $_SESSION['errormsg'] . "</div>";
-                        $_SESSION['errormsg'] = null;
+                    if (isset($_SESSION['error']) && $_SESSION['error'] != "") {
+                        echo "<div class='alert alert-danger'>" . $_SESSION['error'] . "</div>";
+                        $_SESSION['error'] = null;
                     }
 
                     ?>
