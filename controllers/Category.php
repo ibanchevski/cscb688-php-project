@@ -8,8 +8,12 @@ use Utils\DBConnector;
 class Category {
     public static function delete($categoryId) {
         $conn = DBConnector::getInstance()->getConnection();
-        $deleteQuery = $conn->prepare('delete from user_categories where id=?');
-        $deleteQuery->execute([$categoryId]);
+
+        $deleteExpenses = $conn->prepare('delete from expenses where categoryid=?');
+        $deleteExpenses->execute([$categoryId]);
+
+        $deleteCategory = $conn->prepare('delete from user_categories where id=?');
+        $deleteCategory->execute([$categoryId]);
     }
 
     public static function create($categoryName, $userId) {
