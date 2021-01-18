@@ -19,7 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     return header('location:dashboard.php');
 }
 
-$categories = Controllers\User::getCategories($_SESSION['userid']);
+$search = '';
+if (isset($_GET['search']) && $_GET['search'] !== "") {
+    $search = $_GET["search"];
+}
+
+$categories = Controllers\User::getCategories($_SESSION['userid'], $search);
 ?>
 
 <!DOCTYPE html>
@@ -57,11 +62,13 @@ require_once('head.php');
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="input-group">
-                        <div class="input-group-text" ><i class="fas fa-search"></i></div>
-                        <input type="text" class="form-control" name="search" value="" placeholder="Search...">
-                        <button type="submit" class="btn btn-primary-purple">Search</button>
-                    </div>
+                    <form method="GET">
+                        <div class="input-group">
+                            <div class="input-group-text" ><i class="fas fa-search"></i></div>
+                            <input type="text" class="form-control" name="search" value="<?php echo $search ?>" placeholder="Search...">
+                            <button type="submit" class="btn btn-primary-purple">Search</button>
+                        </div>
+                    </form>
                 </div>
                 <div class="col-sm-4">
                     <h4 class="text-muted float-end">
@@ -96,30 +103,27 @@ require_once('head.php');
         <div class="container category-holder">
             <?php
             echo '<div class="row">';
-            $currColInd = 0;
+            $currColInd = 1;
             foreach($categories as $key => $value) {
-                /* echo "name: ".$key."<br>";
-                 * echo "catid: ".$value['catid']."<br>";
-                 * echo "entries:<br>";
-                 * var_dump($value['expenses']); */
-                if ($currColInd % 4 == 0) {
+                if ($currColInd % 5 == 0) {
                     echo '</div><div class="row">';
                 }
+
                 echo '<div class="col-sm category mb-3 shadow-sm" id="category-'.$value["catid"].'">';
-                echo '  <div class="mb-2 d-flex justify-content-end">
-                          <button type="button" class="btn btn-sm btn-primary-purple border-top-0 rounded-0 rounded-bottom me-2 shadow-sm" onclick="toggleCategoryRename('.$category['id'].')">
+                echo '  <div class="mb-2 d-flex align-items-start justify-content-end">
+                          <button type="button" class="btn btn-sm btn-primary-purple border-top-0 rounded-0 rounded-bottom me-2 shadow-sm" onclick="toggleCategoryRename('.$value["catid"].')">
                             <i class="fas fa-pencil-alt"></i>
                           </button>
-                          <form method="post" style="display: inline;">
+                          <form method="post">
                             <input type="hidden" name="deleteCategory" value="'.$value["catid"].'" style="width:0;">
                             <button type="submit" class="btn btn-sm btn-danger border-top-0 rounded-0 rounded-bottom shadow-sm"><i class="far fa-trash-alt"></i></button>
                           </form>
                         </div>
-                        <h4 class="fw-bold pw-3" style="color: #4c85f2">'.$key.'</h4>
+                        <h4 class="fw-bold pw-3 category-name" style="color: #4c85f2">'.$key.'</h4>
                         <form method="post" name="rename" class="d-none">
                            <input type="hidden" name="categoryId" value="'.$value["catid"].'">
                            <div class="input-group">
-                             <input type="text" class="form-control" name="newCategoryName" value="'.$category['name'].'">
+                             <input type="text" class="form-control" name="newCategoryName" value="'.$key.'">
                              <button class="btn btn-primary-purple" type="submit">Save</button>
                            </div>
                          </form>

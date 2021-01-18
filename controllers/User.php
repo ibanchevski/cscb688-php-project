@@ -69,11 +69,19 @@ class User {
         return 'invalid';
     }
 
-    public static function getCategories($userId) {
+    public static function getCategories($userId, $search="") {
         $db = (DBConnector::getInstance())->getConnection();
+
         $statement = "select user_categories.id, name, expenses.id as entryid, description,amount,date from user_categories left join expenses on categoryid=user_categories.id where userid=?";
+        $params = [$userId];
+
+        if ($search != "") {
+            $statement .= " and (name like ? or description like ? or amount like ?)";
+            $params = [$userId, $search, $search, $search];
+        }
+
         $getQuery = $db->prepare($statement);
-        $getQuery->execute([$userId]);
+        $getQuery->execute($params);
 
         $categoriesEntries = $getQuery->fetchAll(\PDO::FETCH_ASSOC);
         $categories = array();
