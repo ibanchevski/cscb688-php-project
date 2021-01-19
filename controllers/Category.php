@@ -33,4 +33,17 @@ class Category {
         $addQuery = $conn->prepare('insert into expenses(amount,description,categoryid,date) values(?,?,?, NOW())');
         $addQuery->execute([$expense['amount'], $expense['description'], $expense['categoryid']]);
     }
+
+    public static function deleteExpense($expenseId) {
+        $conn = (DBConnector::getInstance())->getConnection();
+
+        $find = $conn->prepare('select amount from expenses where id=?');
+        $find->execute([$expenseId]);
+        $deletedExpense = $find->fetch(\PDO::FETCH_ASSOC);
+
+        $deleteQuery = $conn->prepare('delete from expenses where id=?');
+        $deleteQuery->execute([$expenseId]);
+
+        return $deletedExpense;
+    }
 }

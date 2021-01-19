@@ -6,11 +6,21 @@ require_once("controllers/Category.php");
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['deleteCategory'])) {
+
         Controllers\Category::delete($_POST['deleteCategory']);
+
     } else if (isset($_POST['newCategory'])) {
+
         Controllers\Category::create($_POST['newCategory'], $_SESSION['userid']);
+
     } else if (isset($_POST['newCategoryName'])) {
+
         Controllers\Category::rename($_POST['newCategoryName'], $_POST['categoryId']);
+
+    } else if (isset($_POST['deleteExpense'])) {
+        $deletedExpense = Controllers\Category::deleteExpense($_POST["deleteExpense"]);
+        $expenseAmount = floatval($deletedExpense["amount"]) * -1;
+        Controllers\User::addExpenses($_SESSION["userid"], $expenseAmount);
     }
     return header('location:dashboard.php');
 }
@@ -127,7 +137,9 @@ require_once('head.php');
                 
                 foreach($value["expenses"] as $expense) {
                     echo '<div class="log-wrapper" id="'.$expense["id"].'">';
-                    echo '<button type="button" class="btn btn-sm btn-danger"><i class="far fa-trash-alt"></i></button>';
+                    echo '<form method="POST"><input type="hidden" name="deleteExpense" value="'.$expense["id"].'">';
+                    echo '<button type="submit" class="btn btn-sm btn-danger"><i class="far fa-trash-alt"></i></button>';
+                    echo '</form>';
                     echo '<div class="log-date">'.$expense["date"].'</div>';
                     echo '<div class="log-description">'.$expense["description"].'</div>';
                     echo '<div class="log-amount">'.number_format((float)$expense["amount"], 2, '.', '').' лв.</div>';
