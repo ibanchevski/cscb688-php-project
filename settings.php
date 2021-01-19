@@ -33,7 +33,7 @@ $user = Controllers\User::getById($_SESSION['userid']);
                                 </div>
                                 <div class="mb-3">
                                     <label for="password">New password</label>
-                                    <input type="password" id="password" class="form-control" name="password">
+                                    <input type="password" id="password" class="form-control" name="password" value="">
                                 </div>
                                 <div class="d-grid gap-2">
                                     <button type="submit" class="btn btn-primary">Update</button>

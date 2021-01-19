@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['newCategoryName'])) {
         Controllers\Category::rename($_POST['newCategoryName'], $_POST['categoryId']);
     }
-//    return header('location:dashboard.php');
+    return header('location:dashboard.php');
 }
 
 $search = '';

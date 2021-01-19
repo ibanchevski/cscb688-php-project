@@ -122,8 +122,20 @@ class User {
 
     public static function update($userId, $newUser) {
         $db = (DBConnector::getInstance())->getConnection();
-        $updateQ = $db->prepare("update users set name=?,email=? where id=?");
-        $updateQ->execute([$newUser['name'], $newUser['email'], $userId]);
+        $updateStm = "update users set name=?,email=?";
+        $params = [$newUser['name'], $newUser['email']];
+
+        if ($newUser["password"] !== "" && $newUser["password"] !== " ") {
+            $newUserPassword = password_hash($newUser['password'], PASSWORD_BCRYPT);
+            $updateStm .= ",password = ?";
+            $params[] = $newUserPassword;
+        }
+
+        $updateStm.= " where id=?";
+        $params[] = $userId;
+
+        $updateQ = $db->prepare($updateStm);
+        $updateQ->execute($params);
     }
 
     public function addExpenses($userId, $amount) {

@@ -23,7 +23,7 @@ case 'register':
     $user = array(
         "name" => $_POST['name'],
         "email" => $_POST['email'],
-        "password" => $_post['password']
+        "password" => $_POST['password']
     );
 
     try {
@@ -34,18 +34,21 @@ case 'register':
         header('location:../register.php');
         break;
     }
-    header('location:../dashboard.php');
 
+    header('location:../dashboard.php');
     break;
+
 case 'updateUser':
     $user = array(
         "name" => $_POST['name'],
         "email" => $_POST['email'],
-        "password" => $_post['password']
+        "password" => $_POST['password']
     );
+
     Controllers\User::update($_SESSION['userid'], $user);
     header('location:../settings.php');
     break;
+
 case 'newEntry':
     $entry = array(
         "amount" => floatval($_POST["amount"]),
