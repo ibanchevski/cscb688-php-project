@@ -61,4 +61,14 @@ case 'newEntry':
 
     header('location:../dashboard.php');
     break;
+
+case 'deleteAccount':
+    $userCategories = Controllers\User::delete($_SESSION['userid']);
+
+    foreach ($userCategories as $category) {
+        Controllers\Category::delete($category["id"]);
+    }
+
+    header('location:../index.php');
+    break;
 }

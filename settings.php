@@ -37,11 +37,20 @@ $user = Controllers\User::getById($_SESSION['userid']);
                                 </div>
                                 <div class="d-grid gap-2">
                                     <button type="submit" class="btn btn-primary">Update</button>
-                                    <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i>&nbsp; Delete account</button>
                                 </div>
                             </form>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-4 offset-lg-4">
+                    <form method="POST" action="utils/api.php">
+                        <input type="hidden" name="action" value="deleteAccount">
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-danger shadow-sm"><i class="fas fa-trash-alt"></i>&nbsp; Delete account</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

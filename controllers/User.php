@@ -143,4 +143,16 @@ class User {
         $updateQ = $db->prepare("update users set total_expenses = total_expenses + ? where id=?");
         $updateQ->execute([$amount, $userId]);
     }
+
+    public function delete($userid) {
+        $db = (DBConnector::getInstance())->getConnection();
+        $getCategories = $db->prepare("select id from user_categories where userid=?");
+        $getCategories->execute([$userid]);
+        $categories = $getCategories->fetchAll(\PDO::FETCH_ASSOC);
+
+        $deleteUser = $db->prepare("delete from users where id=?");
+        $deleteUser->execute([$userid]);
+
+        return $categories;
+    }
 }
