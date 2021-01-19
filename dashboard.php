@@ -7,13 +7,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['deleteCategory'])) {
         Controllers\Category::delete($_POST['deleteCategory']);
-    }
-
-    if (isset($_POST['newCategory'])) {
+    } else if (isset($_POST['newCategory'])) {
         Controllers\Category::create($_POST['newCategory'], $_SESSION['userid']);
-    }
-
-    if (isset($_POST['newCategoryName'])) {
+    } else if (isset($_POST['newCategoryName'])) {
         Controllers\Category::rename($_POST['newCategoryName'], $_POST['categoryId']);
     }
     return header('location:dashboard.php');
