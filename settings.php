@@ -44,11 +44,17 @@ $user = Controllers\User::getById($_SESSION['userid']);
                 </div>
             </div>
             <div class="row mt-3">
+                <hr>
                 <div class="col-md-4 offset-lg-4">
+                    <h3 class="text-danger mt-2 mb-4">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        &nbsp;
+                        Delete account
+                    </h3>
                     <form method="POST" action="utils/api.php">
                         <input type="hidden" name="action" value="deleteAccount">
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-danger shadow-sm"><i class="fas fa-trash-alt"></i>&nbsp; Delete account</button>
+                            <button type="submit" class="btn btn-lg btn-danger shadow-sm"><i class="fas fa-trash-alt"></i>&nbsp; Delete</button>
                         </div>
                     </form>
                 </div>
