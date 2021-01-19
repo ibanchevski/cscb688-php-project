@@ -9,11 +9,17 @@ class Category {
     public static function delete($categoryId) {
         $conn = DBConnector::getInstance()->getConnection();
 
+        $getExpenses = $conn->prepare('select amount from expenses where categoryid=?');
+        $getExpenses->execute([$categoryId]);
+        $expenses = $getExpenses->fetchAll(\PDO::FETCH_ASSOC);
+
         $deleteExpenses = $conn->prepare('delete from expenses where categoryid=?');
         $deleteExpenses->execute([$categoryId]);
 
         $deleteCategory = $conn->prepare('delete from user_categories where id=?');
         $deleteCategory->execute([$categoryId]);
+
+        return $expenses;
     }
 
     public static function create($categoryName, $userId) {

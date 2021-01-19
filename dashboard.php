@@ -7,7 +7,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['deleteCategory'])) {
 
-        Controllers\Category::delete($_POST['deleteCategory']);
+        $categoryExpenses = Controllers\Category::delete($_POST['deleteCategory']);
+        $total = 0;
+
+        foreach ($categoryExpenses as $expense) {
+            $total += floatval($expense["amount"]);
+        }
+
+        $total *= -1;
+        Controllers\User::addExpenses($_SESSION["userid"], $total);
 
     } else if (isset($_POST['newCategory'])) {
 
@@ -18,9 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         Controllers\Category::rename($_POST['newCategoryName'], $_POST['categoryId']);
 
     } else if (isset($_POST['deleteExpense'])) {
+
         $deletedExpense = Controllers\Category::deleteExpense($_POST["deleteExpense"]);
         $expenseAmount = floatval($deletedExpense["amount"]) * -1;
         Controllers\User::addExpenses($_SESSION["userid"], $expenseAmount);
+
     }
     return header('location:dashboard.php');
 }
@@ -54,7 +64,7 @@ require_once('head.php');
                             Add category
                         </button>
                         <button type="button" class="btn btn-primary-purple <?php if (count($categories) == 0) {echo "disabled";} ?>" id="addEntryBtn">
-                            Add entry
+                            Add expense
                         </button>
                     </div>
                     <div class="d-none custom-category-holder mt-3">
