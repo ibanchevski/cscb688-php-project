@@ -6,22 +6,19 @@ require_once($_SERVER['DOCUMENT_ROOT']."/utils/database.php");
 use Utils\DBConnector;
 
 class UserException extends \Exception {
-    public function __construct($message, $code = 0, Exception $previous = null) {
+    public function __construct($message, $code = 0, \Exception $previous = null) {
         parent::__construct($message, $code, $previous);
     }
 }
 
 class User {
-    private $id;
-    private $email;
-    private $name;
-
     /**
-     * Authenticates user with email and password and returns
-     * user id.
+     * Authenticates user with email and password
+     * and returns user id.
      * @param string email
      * @param string password
-     * @return string id User id
+     * @return string id User's id
+     * @throws UserException
      */
     public static function authenticate($email, $password) {
         $db = (DBConnector::getInstance())->getConnection();
@@ -41,6 +38,12 @@ class User {
         return $user['id'];
     }
 
+    /**
+     * Creates new user with given name, email, password
+     * @param array user Associative array containing: name,email,password
+     * @return string id User's id
+     * @throws UserException
+     */
     public static function register($user) {
         $db = (DBConnector::getInstance())->getConnection();
 
@@ -58,6 +61,11 @@ class User {
         return $db->lastInsertId();
     }
 
+    /**
+     * Finds user by given user id
+     * @param int id
+     * @return array user
+     */
     public static function getById($id) {
         $db = (DBConnector::getInstance())->getConnection();
 
@@ -68,7 +76,11 @@ class User {
         return $user;
     }
 
-
+    /**
+     * Validates user id
+     * @param int id User's id
+     * @return string [valid | invalid]
+     */
     public static function validate($userId) {
         $db = (DBConnector::getInstance())->getConnection();
         $existQuery = $db->prepare('select exists(select id from users where id=? limit 1) as "user_exists"');
@@ -80,46 +92,12 @@ class User {
         return 'invalid';
     }
 
-    public static function getCategories($userId, $search="") {
-        $db = (DBConnector::getInstance())->getConnection();
 
-        $statement = "select user_categories.id, name, expenses.id as entryid, description,amount,date from user_categories left join expenses on categoryid=user_categories.id where userid=?";
-        $params = [$userId];
-
-        if ($search != "") {
-            $statement .= " and (name like ? or description like ? or amount like ?)";
-            $rawSearch = $search;
-            $search = '%'.$search.'%';
-            $params = [$userId, $search, $search, $rawSearch];
-        }
-
-        $getQuery = $db->prepare($statement);
-        $getQuery->execute($params);
-
-        $categoriesEntries = $getQuery->fetchAll(\PDO::FETCH_ASSOC);
-        $categories = array();
-
-        foreach ($categoriesEntries as $entry) {
-            if (!isset($categories[$entry["name"]])) {
-                $categories[$entry["name"]] = array(
-                    "catid" => $entry["id"],
-                    "expenses" => []
-                );
-            }
-
-            if ($entry["entryid"] === NULL) { continue; }
-
-            $categories[$entry["name"]]["expenses"][] = array (
-                "id" => $entry["entryid"],
-                "description" => $entry["description"],
-                "amount" => $entry["amount"],
-                "date" => $entry["date"],
-            );
-        }
-
-        return $categories;
-    }
-
+    /**
+     * Updates user with provided user object
+     * @param int userid
+     * @param array newUser Assoc. array with the new user datata
+     */
     public static function update($userId, $newUser) {
         $db = (DBConnector::getInstance())->getConnection();
         $updateStm = "update users set name=?,email=?";
@@ -138,12 +116,22 @@ class User {
         $updateQ->execute($params);
     }
 
-    public function addExpenses($userId, $amount) {
+    /**
+     * Adds expenses to the user's total expenses
+     * @param int userid
+     * @param float amount
+     */
+    public static function addExpenses($userId, $amount) {
         $db = (DBConnector::getInstance())->getConnection();
         $updateQ = $db->prepare("update users set total_expenses = total_expenses + ? where id=?");
         $updateQ->execute([$amount, $userId]);
     }
 
+    /**
+     * Deletes the user account and returns their categories
+     * @param int userid
+     * @return array categories
+     */
     public function delete($userid) {
         $db = (DBConnector::getInstance())->getConnection();
         $getCategories = $db->prepare("select id from user_categories where userid=?");

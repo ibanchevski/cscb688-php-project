@@ -2,18 +2,14 @@
 session_start();
 require_once("controllers/User.php");
 
-use Controllers;
-
+// Check if valid sessionid and transit to dashboard
 if (isset($_SESSION['userid'])) {
-    // Check if valid sessionid and transit to dashboard
     $userState = Controllers\User::validate($_SESSION['userid']);
 
     if ($userState === 'valid') {
        return header('location:dashboard.php');
     }
 }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

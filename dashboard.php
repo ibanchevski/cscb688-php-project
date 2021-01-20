@@ -1,46 +1,13 @@
 <?php
 session_start();
-require_once("controllers/User.php");
 require_once("controllers/Category.php");
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    if (isset($_POST['deleteCategory'])) {
-
-        $categoryExpenses = Controllers\Category::delete($_POST['deleteCategory']);
-        $total = 0;
-
-        foreach ($categoryExpenses as $expense) {
-            $total += floatval($expense["amount"]);
-        }
-
-        $total *= -1;
-        Controllers\User::addExpenses($_SESSION["userid"], $total);
-
-    } else if (isset($_POST['newCategory'])) {
-
-        Controllers\Category::create($_POST['newCategory'], $_SESSION['userid']);
-
-    } else if (isset($_POST['newCategoryName'])) {
-
-        Controllers\Category::rename($_POST['newCategoryName'], $_POST['categoryId']);
-
-    } else if (isset($_POST['deleteExpense'])) {
-
-        $deletedExpense = Controllers\Category::deleteExpense($_POST["deleteExpense"]);
-        $expenseAmount = floatval($deletedExpense["amount"]) * -1;
-        Controllers\User::addExpenses($_SESSION["userid"], $expenseAmount);
-
-    }
-    return header('location:dashboard.php');
-}
 
 $search = '';
 if (isset($_GET['search']) && $_GET['search'] !== "") {
     $search = $_GET["search"];
 }
 
-$categories = Controllers\User::getCategories($_SESSION['userid'], $search);
+$categories = Controllers\Category::getCategories($_SESSION['userid'], $search);
 ?>
 
 <!DOCTYPE html>
@@ -69,7 +36,8 @@ require_once('head.php');
                     </div>
                     <div class="d-none custom-category-holder mt-3">
                         <p class="text-danger add-category-error d-none">Category already exists!</p>
-                        <form name="newCategoryForm" id="newCategoryForm" method="post">
+                        <form name="newCategoryForm" id="newCategoryForm" method="post" action="utils/api.php">
+                            <input type="hidden" name="action" value="newCategory">
                             <div class="input-group">
                                 <input type="text" placeholder="Category name" name="newCategory" class="form-control" id="custom-category">
                                 <button type="submit" class="btn btn-primary-purple">Add</button>
@@ -130,13 +98,15 @@ require_once('head.php');
                           <button type="button" class="btn btn-sm btn-primary-purple border-top-0 rounded-0 rounded-bottom me-2 shadow-sm" onclick="toggleCategoryRename('.$value["catid"].')">
                             <i class="fas fa-pencil-alt"></i>
                           </button>
-                          <form method="post">
+                          <form method="post" action="utils/api.php">
+                            <input type="hidden" name="action" value="deleteCategory">
                             <input type="hidden" name="deleteCategory" value="'.$value["catid"].'" style="width:0;">
                             <button type="submit" class="btn btn-sm btn-danger border-top-0 rounded-0 rounded-bottom shadow-sm"><i class="far fa-trash-alt"></i></button>
                           </form>
                         </div>
                         <h4 class="fw-bold pw-3 category-name" style="color: #4c85f2">'.$key.'</h4>
-                        <form method="post" name="rename" class="d-none">
+                        <form method="post" name="rename" class="d-none" action="utils/api.php">
+                           <input type="hidden" name="action" value="newCategoryName">
                            <input type="hidden" name="categoryId" value="'.$value["catid"].'">
                            <div class="input-group">
                              <input type="text" class="form-control" name="newCategoryName" value="'.$key.'">
@@ -147,7 +117,7 @@ require_once('head.php');
                 
                 foreach($value["expenses"] as $expense) {
                     echo '<div class="log-wrapper" id="'.$expense["id"].'">';
-                    echo '<form method="POST"><input type="hidden" name="deleteExpense" value="'.$expense["id"].'">';
+                    echo '<form method="POST" action="utils/api.php"><input type="hidden" name="action" value="deleteExpense"><input type="hidden" name="deleteExpense" value="'.$expense["id"].'">';
                     echo '<button type="submit" class="btn btn-sm btn-danger"><i class="far fa-trash-alt"></i></button>';
                     echo '</form>';
                     echo '<div class="log-date">'.$expense["date"].'</div>';

@@ -6,7 +6,10 @@ $user = Controllers\User::getById($_SESSION['userid']);
 ?>
 <!DOCTYPE html>
 <html>
-    <?php $CURR_TITLE = 'Settings'; require_once("head.php"); ?>
+    <?php
+    $CURR_TITLE = 'Settings';
+    require_once("head.php");
+    ?>
     <body>
         <?php require_once("navbar.php"); ?>
         <div class="container">

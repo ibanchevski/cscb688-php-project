@@ -2,7 +2,7 @@
 session_start();
 
 if (isset($_SESSION['error'])) {
-    $error = $_SESSION['error'];
+  $error = $_SESSION['error'];
 }
 ?>
 
@@ -37,19 +37,19 @@ if (isset($_SESSION['error'])) {
               <input type="hidden" name="action" value="register">
               <div class="mb-3">
                 <label for="name">Full name</label>
-                <input type="text" class="form-control" name="name" id="name">
+                <input type="text" class="form-control" name="name" id="name" required>
               </div>
               <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" name="email" id="email">
+                <input type="email" class="form-control" name="email" id="email" required>
               </div>
               <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" name="password" id="password">
+                <input type="password" class="form-control" name="password" id="password" required>
               </div>
               <div class="mb-3">
                 <label for="rpassword">Repeat password</label>
-                <input type="password" class="form-control" id="rpassword">
+                <input type="password" class="form-control" name="rpassword" id="rpassword" required>
               </div>
               <div class="d-grid gap-2 col-12 mx-auto">
                 <button type="submit" class="btn btn-block btn-lg btn-primary">Register</button>

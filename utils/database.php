@@ -8,7 +8,6 @@ class DBConnector {
 
     public function __construct() {
         global $DB_CONFIG;
-
         $host = $DB_CONFIG['host'];
         $port = $DB_CONFIG['port'];
         $db   = $DB_CONFIG['dbname'];
@@ -21,7 +20,6 @@ class DBConnector {
             exit ($e->getMessage());
         }
     }
-
 
     public function getConnection() {
         return $this->conn;
