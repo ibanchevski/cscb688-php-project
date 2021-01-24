@@ -35,6 +35,7 @@ class Category {
     public static function create($categoryName, $userId) {
         $conn = DBConnector::getInstance()->getConnection();
         $createQuery = $conn->prepare('insert into user_categories(name,userid) values (?,?)');
+        $categoryName = htmlspecialchars($categoryName, ENT_QUOTES);
         $createQuery->execute([$categoryName, $userId]);
     }
 
@@ -46,6 +47,7 @@ class Category {
     public static function rename($newName, $categoryId) {
         $conn = DBConnector::getInstance()->getConnection();
         $renameQuery = $conn->prepare('update user_categories set name=? where id=?');
+        $newName = htmlspecialchars($newName, ENT_QUOTES);
         $renameQuery->execute([$newName, $categoryId]);
     }
 
@@ -56,6 +58,7 @@ class Category {
     public static function addExpense($expense) {
         $conn = (DBConnector::getInstance())->getConnection();
         $addQuery = $conn->prepare('insert into expenses(amount,description,categoryid,date) values(?,?,?, NOW())');
+        $expense['description'] = htmlspecialchars($expense['description'], ENT_QUOTES);
         $addQuery->execute([$expense['amount'], $expense['description'], $expense['categoryid']]);
     }
 
